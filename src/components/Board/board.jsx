@@ -121,18 +121,8 @@ class Board extends React.Component {
             console.log("Board elements is null");
         }
 
-        let element1 = boardElements[0];
-        let element2 = boardElements[4];
-        let element3 = boardElements[8];
-
         this.checkResult(0, 4, 8, boardElements);
-
-         element1 = boardElements[2];
-         element2 = boardElements[4];
-         element3 = boardElements[6];
-
-         this.checkResult(2, 4, 6, boardElements);
-
+        this.checkResult(2, 4, 6, boardElements);
     }
 
     checkIfPlayerWon=(testElement) => {
@@ -143,7 +133,7 @@ class Board extends React.Component {
         if(this.gameHasEnded){
             return;
         }
-        
+
         let element1 = boardElement[index1];
         let element2 = boardElement[index2];
         let element3 = boardElement[index3];
