@@ -8,10 +8,11 @@ class Board extends React.Component {
         super(probs);
         this.state = { boardElements: ['', '', '', '', '', '', '', '', ''],
                         boardElementColors: ['', '', '', '', '', '', '', '', ''],
-                       gameHasEnded: false,
                        victories: 0,
                        defeats: 0}
     }
+
+    gameHasEnded = false;
 
     render() {
         return (
@@ -40,7 +41,7 @@ class Board extends React.Component {
     }
 
     tryToMarkElement = (index) => {
-        if(this.state.gameHasEnded == true) return;
+        if(this.gameHasEnded == true) return;
 
         if (this.state.boardElements[index] != '') {
             return;
@@ -126,7 +127,6 @@ class Board extends React.Component {
 
         this.checkResult(0, 4, 8, boardElements);
 
-
          element1 = boardElements[2];
          element2 = boardElements[4];
          element3 = boardElements[6];
@@ -140,6 +140,10 @@ class Board extends React.Component {
     }
 
     checkResult(index1, index2, index3, boardElement){
+        if(this.gameHasEnded){
+            return;
+        }
+        
         let element1 = boardElement[index1];
         let element2 = boardElement[index2];
         let element3 = boardElement[index3];
@@ -169,9 +173,8 @@ class Board extends React.Component {
     }
 
     declareVictory = () =>{
-        if(this.state.gameHasEnded) return;
         this.setState({victories: this.state.victories+1})
-        this.setState({gameHasEnded: true}, () => {console.log(this.state.gameHasEnded)});
+        this.gameHasEnded = true;
         console.log("Player Won!");
     }
 
@@ -193,21 +196,18 @@ class Board extends React.Component {
 
 
     declareDefeat = () => {
-        if(this.state.gameHasEnded) return;
         this.setState({defeats: this.state.defeats+1})
-        this.setState({gameHasEnded: true }, () => {console.log(this.state.gameHasEnded)});
+        this.gameHasEnded = true;
         console.log("Player Lost!");
     }
 
     declareTie = () =>{
-        if(this.state.gameHasEnded) return;
-
-        this.setState({gameHasEnded: true }, () => {console.log(this.state.gameHasEnded)});
+        this.gameHasEnded = true;
         console.log("Is a Tie");
     }
 
     restartGame = () => {
-        this.setState({gameHasEnded:false});
+        this.gameHasEnded = false;
         this.setState({ boardElements: ['', '', '', '', '', '', '', '', '']});
         this.setState({ boardElementColors: ['', '', '', '', '', '', '', '', '']});
 
