@@ -1,0 +1,33 @@
+.boardElement{
+    width: 100px;
+    height: 100px;
+    background-color: #B8DEB7;
+    margin: 4px;
+    border-radius: 37px;
+  }
+  
+  .boardElement:hover{
+    background-color: #68CAB3;
+    cursor: pointer;
+  }
+
+.victoryColor{
+  background-color: #48D05E;
+}
+
+.defeatColor{
+  background-color: #d06348;
+}
+
+.mark{
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: 'Salsa';  
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: #ffffff;
+}
