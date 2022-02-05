@@ -12,12 +12,22 @@
   }
 
 .victoryColor{
-  background-color: #48D05E;
+  background-color: #6dff85;
 }
+
+.victoryColor:hover{
+  background-color: #a1ffb1;
+}
+
 
 .defeatColor{
   background-color: #d06348;
 }
+
+.defeatColor:hover{
+  background-color: #ff9d84;
+}
+
 
 .mark{
     width: 100px;

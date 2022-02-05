@@ -31,8 +31,12 @@ class Board extends React.Component {
 
     generateBoardElements(element, index) {
         return (
-            <BoardElement style={"boardElement"} key={index} markPlayerFunction={() => this.tryToMarkElement(index)} value={this.state.boardElements.at(index)}></BoardElement>
+            <BoardElement style={this.getColor(index)} key={index} markPlayerFunction={() => this.tryToMarkElement(index)} value={this.state.boardElements.at(index)}></BoardElement>
         )
+    }
+
+    getColor(index){
+        return "boardElement " + this.state.boardElementColors[index];
     }
 
     tryToMarkElement = (index) => {
@@ -96,11 +100,7 @@ class Board extends React.Component {
             let element3 = boardElements[row + 2];
 
             console.log(`rows: ${row}:${element1} ${row + 1}:${element2} ${row + 2}:${element3}`)
-
-            if (this.checkIfIsEqual(element1, element2, element3)) 
-            {
-                this.checkWhoWon(element1);
-            }
+            this.checkResult(row, row+1, row+2, boardElements);
         }
     }
 
@@ -111,14 +111,7 @@ class Board extends React.Component {
 
         for (let i = 0; i < 3; i++) {
             let row = i;
-            let element1 = boardElements[row];
-            let element2 = boardElements[row + 3];
-            let element3 = boardElements[row + 6];
-
-            if (this.checkIfIsEqual(element1, element2, element3)) 
-            {
-                this.checkWhoWon(element1);
-            }
+            this.checkResult(row,row+3, row+6, boardElements);
         }
     }
 
@@ -131,35 +124,48 @@ class Board extends React.Component {
         let element2 = boardElements[4];
         let element3 = boardElements[8];
 
-        if (this.checkIfIsEqual(element1, element2, element3)) 
-        {
-            this.checkWhoWon(element1);
-        }
+        this.checkResult(0, 4, 8, boardElements);
+
 
          element1 = boardElements[2];
          element2 = boardElements[4];
          element3 = boardElements[6];
 
+         this.checkResult(2, 4, 6, boardElements);
+
+    }
+
+    checkIfPlayerWon=(testElement) => {
+    return testElement === "X";
+    }
+
+    checkResult(index1, index2, index3, boardElement){
+        let element1 = boardElement[index1];
+        let element2 = boardElement[index2];
+        let element3 = boardElement[index3];
+
+
+        if(element1 == "") return;
+        if(element2 == "") return;
+        if(element3 == "") return;
+
+        console.log(`elementos passados: ${element1}, ${element2}, ${element3}`)
+
         if (this.checkIfIsEqual(element1, element2, element3)) 
         {
-            this.checkWhoWon(element1);
+            if(this.checkIfPlayerWon(element1)){
+                this.declareVictory();
+                this.changeColorToVictory(index1, index2, index3);
+            }else{
+                this.declareDefeat();
+                this.changeColorToDefeat(index1, index2, index3);
+            }
+
         }
     }
 
     checkIfIsEqual = (element1, element2, element3) => {
         return ((element1 === element2) && (element2 === element3));
-    }
-
-    checkWhoWon = (elementOfTest) => {
-        if(elementOfTest === "") return;
-
-        if (elementOfTest === "X") 
-        {
-            this.declareVictory();
-            return;
-        }
-
-        this.declareDefeat();
     }
 
     declareVictory = () =>{
@@ -168,6 +174,23 @@ class Board extends React.Component {
         this.setState({gameHasEnded: true}, () => {console.log(this.state.gameHasEnded)});
         console.log("Player Won!");
     }
+
+    changeColorToVictory = (index1, index2, index3) =>{
+        let newBoardElementColors = Array.from(this.state.boardElementColors);
+        newBoardElementColors[index1] = "victoryColor";
+        newBoardElementColors[index2] = "victoryColor";
+        newBoardElementColors[index3] = "victoryColor";
+        this.setState({boardElementColors: newBoardElementColors})
+    }
+
+    changeColorToDefeat = (index1, index2, index3) =>{
+        let newBoardElementColors = Array.from(this.state.boardElementColors);
+        newBoardElementColors[index1] = "defeatColor";
+        newBoardElementColors[index2] = "defeatColor";
+        newBoardElementColors[index3] = "defeatColor";
+        this.setState({boardElementColors: newBoardElementColors})
+    }
+
 
     declareDefeat = () => {
         if(this.state.gameHasEnded) return;
@@ -186,6 +209,8 @@ class Board extends React.Component {
     restartGame = () => {
         this.setState({gameHasEnded:false});
         this.setState({ boardElements: ['', '', '', '', '', '', '', '', '']});
+        this.setState({ boardElementColors: ['', '', '', '', '', '', '', '', '']});
+
     }
 }
 
